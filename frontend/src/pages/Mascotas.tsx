@@ -12,11 +12,13 @@ export default function Mascotas({ user }: Props) {
   const [nombre, setNombre] = useState<string>('');
   const [especie, setEspecie] = useState<string>('');
   const [edad, setEdad] = useState<number>(0);
+  const [estado, setEstado] = useState<string>('');
   const [mascotas, setMascotas] = useState<{ 
     id?: number;
     nombre: string; 
     especie: string; 
     edad: number;
+    estado?:string;
     usuarioId: number;
   }[]>([]);
 
@@ -30,7 +32,7 @@ export default function Mascotas({ user }: Props) {
   }, [user.id]);
 
   const handleAdd = async () => {
-    if (!nombre || !especie) {
+    if (!nombre || !especie || !estado) {
       alert('Por favor complete todos los campos');
       return;
     }
@@ -38,12 +40,14 @@ export default function Mascotas({ user }: Props) {
     await addMascota({ 
       nombre, 
       especie, 
-      edad, 
+      edad,
+      estado, 
       usuarioId: user.id 
     });
     setNombre('');
     setEspecie('');
     setEdad(0);
+    setEstado('');
     await cargarMascotas();
   };
 
@@ -80,6 +84,17 @@ export default function Mascotas({ user }: Props) {
         margin="normal" 
         inputProps={{ min: 0 }}
       />
+      <TextField 
+        label="Estado de la Mascota"
+        fullWidth
+        multiline
+        minRows={3}
+        value={estado}
+        onChange={e => setEstado(e.target.value)}
+        margin="normal"
+        required
+      />
+      
       
       <Button 
         variant="contained" 
@@ -96,7 +111,7 @@ export default function Mascotas({ user }: Props) {
       <List>
         {mascotas.map((mascota, index) => (
           <ListItem key={mascota.id || index}>
-            {mascota.nombre} ({mascota.especie}) - {mascota.edad} años
+            {mascota.nombre} ({mascota.especie}) - {mascota.edad} años - Estado: {mascota.estado || 'N/A'}
           </ListItem>
         ))}
       </List>

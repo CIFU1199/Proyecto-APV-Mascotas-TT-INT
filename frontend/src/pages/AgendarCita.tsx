@@ -154,7 +154,7 @@ export default function AgendarCita({ user }: Props) {
               <ListItem key={cita.id} divider>
                 <ListItemText 
                   primary={`${mascota?.nombre || 'Mascota no encontrada'}`}
-                  secondary={`Fecha: ${cita.fecha} - Hora: ${cita.hora} | Estado: ${cita.estado}`}
+                  secondary={`Fecha: ${cita.fecha} - Hora: ${cita.hora} | Estado: ${cita.estado} | Observacion: ${cita.observacion || 'No especificada'}`}
                 />
               </ListItem>
             );

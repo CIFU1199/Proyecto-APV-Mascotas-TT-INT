@@ -2,7 +2,7 @@ import { openDB } from 'idb';
 import { User } from '../types/index';
 
 const DB_NAME = 'citasVetDB';
-const DB_VERSION = 4;
+const DB_VERSION = 5;
 
 export async function initDB() {
   return openDB(DB_NAME, DB_VERSION, {
@@ -45,8 +45,8 @@ export async function getUsuarioByCorreo(correo: string) {
 }
 
 
-// NUEVAS FUNCIONES
-export async function addMascota(mascota: { nombre: string; especie: string; edad: number; usuarioId: number }) {
+// Funciones de Registrar Mascotas 
+export async function addMascota(mascota: { nombre: string; especie: string; edad: number; estado?: string; usuarioId: number }) {
   const db = await initDB();
   await db.add('mascotas', mascota);
 }
@@ -55,6 +55,10 @@ export async function getMascotasByUsuarioId(usuarioId: number) {
   const db = await initDB();
   return (await db.getAllFromIndex('mascotas', 'usuarioId', IDBKeyRange.only(usuarioId))) || [];
 }
+
+
+
+
 export async function addCita(cita: {
   usuarioId: number;
   mascotaId: number;
@@ -73,11 +77,12 @@ export async function getCitasByUsuarioId(usuarioId: number) {
   return await db.getAllFromIndex('citas', 'usuarioId', IDBKeyRange.only(usuarioId));
 }
 
-export async function updateCitaEstado(id: number, nuevoEstado: string) {
+export async function updateCitaEstado(id: number, nuevoEstado: string , observacion:string) {
   const db = await initDB();
   const cita = await db.get('citas', id);
   if (cita) {
     cita.estado = nuevoEstado;
+    cita.observacion = observacion;
     await db.put('citas', cita);
   }
 }

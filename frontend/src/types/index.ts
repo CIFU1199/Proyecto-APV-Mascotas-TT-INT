@@ -22,6 +22,7 @@ export interface Mascota {
   especie?: string; // Opcional
   raza?: string;    // Opcional
   edad?: number;    // Opcional
+  estado?:string;
   usuarioId: number;  // Relación con usuario
 }
 
@@ -33,7 +34,7 @@ export interface Cita {
   fecha: string;         // Considera usar Date o ISO string
   hora: string;
   estado: 'pendiente' | 'completada' | 'cancelada'; // Estados específicos
-  motivo?: string;       // Opcional
+  observacion?: string;       // Opcional
 }
 
 // Tipo simplificado para cuando solo necesitas datos básicos

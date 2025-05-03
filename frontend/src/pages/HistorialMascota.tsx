@@ -14,7 +14,7 @@ import { initDB, getHistorialPorMascota } from '../db/indexedDB';
 export default function HistorialMascota() {
   const [mascotas, setMascotas] = useState<{ id: number; nombre: string }[]>([]);
   const [seleccionada, setSeleccionada] = useState<number | ''>('');
-  const [historial, setHistorial] = useState<{ id: number; fecha: string; hora: string; estado: string }[]>([]);
+  const [historial, setHistorial] = useState<{ id: number; fecha: string; hora: string; estado: string;  observacion : string; }[]>([]);
 
   useEffect(() => {
     const cargarMascotas = async () => {
@@ -52,7 +52,7 @@ export default function HistorialMascota() {
           <ListItem key={cita.id}>
             <ListItemText
               primary={`Fecha: ${cita.fecha} | Hora: ${cita.hora}`}
-              secondary={`Estado: ${cita.estado}`}
+              secondary={`Estado: ${cita.estado} | Observacion Medica: ${cita.observacion}`   }
             />
           </ListItem>
         ))}

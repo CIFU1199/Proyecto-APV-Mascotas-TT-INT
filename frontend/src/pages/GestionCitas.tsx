@@ -4,6 +4,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  TextField,
   Select,
   MenuItem,
   Box,
@@ -21,6 +22,7 @@ const GestionCitas: React.FC<GestionCitasProps> = () => {
   const [citas, setCitas] = useState<Cita[]>([]);
   const [mascotasMap, setMascotasMap] = useState<Record<number, Mascota>>({});
   const [usuariosMap, setUsuariosMap] = useState<Record<number, Usuario>>({});
+  const [observaciones, setObservaciones] = useState<Record<number, string>>({});
 
   useEffect(() => {
     const cargarDatos = async () => {
@@ -49,9 +51,16 @@ const GestionCitas: React.FC<GestionCitasProps> = () => {
     cargarDatos();
   }, []);
 
-  const cambiarEstado = async (id: number, estado: string) => {
+  const cambiarEstado = async (id: number, nuevoEstado: string) => {
+    const observacion = observaciones[id]?.trim();
+    
+    if ((nuevoEstado === "atendida" || nuevoEstado === "cancelada") && !observacion){
+      alert("Debe ingresar una observación para cambiar el estado.");
+      return;
+    }
+    
     try {
-      await updateCitaEstado(id, estado);
+      await updateCitaEstado(id, nuevoEstado, observacion || "");
       const actualizadas = await getTodasLasCitas();
       setCitas(actualizadas);
     } catch (error) {
@@ -77,8 +86,26 @@ const GestionCitas: React.FC<GestionCitasProps> = () => {
                   primary={`${mascota?.nombre || "Mascota no encontrada"} - ${
                     dueño?.nombre || "Dueño no registrado"
                   }`}
-                  secondary={`Fecha: ${cita.fecha} | Hora: ${cita.hora} | Estado actual: ${cita.estado}`}
+                  secondary={
+                    <>
+                      {`Fecha: ${cita.fecha} | Hora: ${cita.hora} | Estado actual: ${cita.estado}`} <br />
+                      {`Estado de la mascota : ${mascota?.estado || "No especificado"}`}
+                    </>
+                  }
                   sx={{ flex: 1 }}
+                />
+                <TextField 
+                  label = "Observacíon"
+                  value={observaciones[cita.id] ?? cita.observacion ?? ""}
+                  multiline
+                  onChange={(e)=>
+                    setObservaciones((prev) => ({
+                      ...prev,
+                      [cita.id]: e.target.value,
+                    }))
+                  }
+                  sx={{mr:2, width: 200}}
+                  size="small"
                 />
                 <Select
                   value={cita.estado}
@@ -94,6 +121,8 @@ const GestionCitas: React.FC<GestionCitasProps> = () => {
                 </Select>
               </ListItem>
               <Divider component="li" />
+
+              
             </Box>
           );
         })}
