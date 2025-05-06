@@ -1,6 +1,17 @@
-import { Container, Typography, Button, Stack, Box } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Button,
+  Stack,
+  Box,
+  Paper
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../types';
+import PetsIcon from '@mui/icons-material/Pets';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
+import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 
 interface Props {
   user: User;
@@ -10,67 +21,87 @@ export default function Dashboard({ user }: Props) {
   const navigate = useNavigate();
 
   return (
-    <Container maxWidth="md">
-      <Box sx={{ 
+    <Box
+      sx={{
+        minHeight: '100vh',
+        background: 'linear-gradient(to right, primary, secondary)',
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
-        mt: 4,
-        p: 3,
-        boxShadow: 3,
-        borderRadius: 2
-      }}>
-        <Typography variant="h4" gutterBottom sx={{ mb: 3 }}>
-          Bienvenido, {user.nombre}
-        </Typography>
-        <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 4 }}>
-          Rol: {user.tipo === 'dueño' ? 'Dueño de mascota' : 'Veterinario'}
-        </Typography>
+        justifyContent: 'center',
+        py: 5
+      }}
+    >
+      <Container maxWidth="sm">
+        <Paper
+          elevation={6}
+          sx={{
+            borderRadius: 4,
+            p: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}
+        >
+          <Typography variant="h4" gutterBottom>
+            Bienvenido, {user.nombre}
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 4 }}>
+            Rol: {user.tipo === 'dueño' ? 'Dueño de Mascota' : 'Veterinario'}
+          </Typography>
 
-        <Stack spacing={3} sx={{ width: '100%', maxWidth: 400 }}>
-          {user.tipo === 'dueño' && (
-            <>
-              <Button 
-                variant="contained" 
-                size="large"
-                onClick={() => navigate('/mascotas')}
-                sx={{ py: 1.5 }}
-              >
-                Registrar Mascotas
-              </Button>
-              <Button 
-                variant="contained" 
-                size="large"
-                onClick={() => navigate('/citas')}
-                sx={{ py: 1.5 }}
-              >
-                Agendar Cita
-              </Button>
-            </>
-          )}
+          <Stack spacing={2} sx={{ width: '100%' }}>
+            {user.tipo === 'dueño' && (
+              <>
+                <Button
+                  variant="contained"
+                  startIcon={<PetsIcon />}
+                  size="large"
+                  fullWidth
+                  onClick={() => navigate('/mascotas')}
+                  sx={{ py: 1.5 }}
+                >
+                  Registrar Mascotas
+                </Button>
+                <Button
+                  variant="contained"
+                  startIcon={<CalendarMonthIcon />}
+                  size="large"
+                  fullWidth
+                  onClick={() => navigate('/citas')}
+                  sx={{ py: 1.5 }}
+                >
+                  Agendar Cita
+                </Button>
+              </>
+            )}
 
-          {user.tipo === 'veterinario' && (
-            <>
-              <Button 
-                variant="contained" 
-                size="large"
-                onClick={() => navigate('/gestion-citas')}
-                sx={{ py: 1.5 }}
-              >
-                Gestionar Citas
-              </Button>
-              <Button 
-                variant="contained" 
-                size="large"
-                onClick={() => navigate('/historial')}
-                sx={{ py: 1.5 }}
-              >
-                Historial Clínico
-              </Button>
-            </>
-          )}
-        </Stack>
-      </Box>
-    </Container>
+            {user.tipo === 'veterinario' && (
+              <>
+                <Button
+                  variant="contained"
+                  startIcon={<ManageSearchIcon />}
+                  size="large"
+                  fullWidth
+                  onClick={() => navigate('/gestion-citas')}
+                  sx={{ py: 1.5 }}
+                >
+                  Gestionar Citas
+                </Button>
+                <Button
+                  variant="contained"
+                  startIcon={<HistoryEduIcon />}
+                  size="large"
+                  fullWidth
+                  onClick={() => navigate('/historial')}
+                  sx={{ py: 1.5 }}
+                >
+                  Historial Clínico
+                </Button>
+              </>
+            )}
+          </Stack>
+        </Paper>
+      </Container>
+    </Box>
   );
 }
