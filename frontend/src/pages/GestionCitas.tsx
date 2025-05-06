@@ -69,7 +69,7 @@ const GestionCitas: React.FC<GestionCitasProps> = () => {
   };
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="md" sx={{ mt: 4 }}>
       <Typography variant="h4" gutterBottom sx={{ mt: 3, mb: 3 }}>
         Gestión de Citas
       </Typography>

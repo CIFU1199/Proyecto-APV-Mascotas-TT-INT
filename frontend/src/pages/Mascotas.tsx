@@ -52,7 +52,7 @@ export default function Mascotas({ user }: Props) {
   };
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="md" sx={{ mt: 4 }}>
       <Typography variant="h4" gutterBottom>
         Registrar Mascota
       </Typography>

@@ -32,7 +32,7 @@ export default function HistorialMascota() {
   };
 
   return (
-    <Container>
+    <Container maxWidth="md" sx={{ mt: 4 }}>
       <Typography variant="h4" gutterBottom>Historial de Atención</Typography>
 
       <Select

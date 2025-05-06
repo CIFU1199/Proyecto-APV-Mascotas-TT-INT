@@ -59,7 +59,7 @@ export default function Navbar({ user, onLogout }: Props) {
 
   return (
     <>
-      <AppBar position="static" sx={{ mb: 4 }}>
+      <AppBar position="static" >
         <Toolbar>
           {user && (
             <IconButton

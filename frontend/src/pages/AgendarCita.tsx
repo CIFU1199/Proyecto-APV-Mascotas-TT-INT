@@ -82,7 +82,7 @@ export default function AgendarCita({ user }: Props) {
   };
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="md" sx={{ mt: 4 }}>
       <Typography variant="h4" gutterBottom sx={{ mt: 2 }}>
         Agendar Cita
       </Typography>
