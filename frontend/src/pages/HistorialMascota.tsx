@@ -10,8 +10,13 @@ import {
   ListItemText
 } from '@mui/material';
 import { initDB, getHistorialPorMascota } from '../db/indexedDB';
+import { User } from '../types/index';
 
-export default function HistorialMascota() {
+interface Props {
+  user: User;
+}
+
+export default function HistorialMascota({ user }: Props){
   const [mascotas, setMascotas] = useState<{ id: number; nombre: string }[]>([]);
   const [seleccionada, setSeleccionada] = useState<number | ''>('');
   const [historial, setHistorial] = useState<{ id: number; fecha: string; hora: string; estado: string;  observacion : string; }[]>([]);
@@ -34,7 +39,7 @@ export default function HistorialMascota() {
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
       <Typography variant="h4" gutterBottom>Historial de Atención</Typography>
-
+      <p>{user.nombre}</p>
       <Select
         fullWidth
         value={seleccionada}

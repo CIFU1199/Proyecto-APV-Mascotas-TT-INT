@@ -22,19 +22,13 @@ import {
   Email as EmailIcon
 } from '@mui/icons-material';
 import { getUsuarioByCorreo } from '../db/indexedDB';
+import { User } from '../types';
 
 
-interface Usuario {
-  id: number;
-  nombre: string;
-  correo: string;
-  contraseña: string;
-  tipo: string;
-  // Agrega otras propiedades según necesites
-}
+
 
 interface LoginProps {
-  onLogin: (user: Usuario) => void;
+  onLogin: (user: User) => void;
 }
 
 

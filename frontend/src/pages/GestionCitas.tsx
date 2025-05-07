@@ -13,12 +13,15 @@ import {
 import { useEffect, useState } from "react";
 import { getTodasLasCitas, updateCitaEstado, initDB } from "../db/indexedDB";
 import { Cita, Mascota, Usuario} from "../types/index"; // Añadido Usuario en la importación
+import { User } from '../types/index';
 
-/* cspell:disable Gestion Citas citas Cita mascotas Mascotas Mascota usuarios Usuarios Usuario cargar Datos Todas Mapeo dueño nombre encontrada registrado Fecha Estado actualizadas actualizando pendiente */
+//type GestionCitasProps = Record<string, never>;
 
-type GestionCitasProps = Record<string, never>;
+interface Props {
+  user: User;
+}
 
-const GestionCitas: React.FC<GestionCitasProps> = () => {
+const GestionCitas: React.FC<Props> = ({ user }) =>  {
   const [citas, setCitas] = useState<Cita[]>([]);
   const [mascotasMap, setMascotasMap] = useState<Record<number, Mascota>>({});
   const [usuariosMap, setUsuariosMap] = useState<Record<number, Usuario>>({});
@@ -73,6 +76,7 @@ const GestionCitas: React.FC<GestionCitasProps> = () => {
       <Typography variant="h4" gutterBottom sx={{ mt: 3, mb: 3 }}>
         Gestión de Citas
       </Typography>
+      <p>{user.nombre}</p>
       <List sx={{ bgcolor: "background.paper" }}>
         {citas.map((cita) => {
           const mascota = mascotasMap[cita.mascotaId];
