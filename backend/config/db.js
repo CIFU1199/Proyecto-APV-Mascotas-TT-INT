@@ -11,9 +11,14 @@ const sequelize = new Sequelize(
         logging: false,
         define:{
             timestamps:true,
-            underscored:true,
+            freezeTableName: true
         }
     }
 );
+
+// Verifica conexión al iniciar
+sequelize.authenticate()
+  .then(() => console.log('✅ Conexión a BD establecida'))
+  .catch(err => console.error('❌ Error de conexión:', err));
 
 module.exports = sequelize;

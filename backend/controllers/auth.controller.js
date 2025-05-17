@@ -1,4 +1,4 @@
-const Usuario = require('../models/Usuario');
+const {Usuario} = require('../models');
 const { generateToken } = require('../utils/jwt');
 
 exports.register = async (req, res) => {
@@ -54,7 +54,7 @@ exports.registerAsAdmin = async (req, res)=>{
     return res.status(403).json({error:'Solo el administrador puede acceder a esta funcion'});
   }
 
-  const { USUA_DOCUMENTO, USUA_NOMBRE, USUA_CORREO,USUA_PASSWORD, USUA_TELEFONO, ROL_ID} = req.body;
+  const { USUA_DOCUMENTO, USUA_NOMBRES, USUA_CORREO,USUA_PASSWORD, USUA_TELEFONO, ROL_ID} = req.body;
 
   try{
     const usuario = await Usuario.create({
@@ -70,6 +70,7 @@ exports.registerAsAdmin = async (req, res)=>{
     delete usuarioResponse.USUA_PASSWORD;
     res.status(201).json(usuarioResponse);
   }catch(error){
+    console.log('Error en registerAsAdmin: ', error);
     res.status(400).json({error: error.message});
   }
 }

@@ -29,7 +29,7 @@ initializeDatabase();
 app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/especie',require ('./routes/especie.routes'));
 app.use('/api/mascotas', require('./routes/mascota.routes'));
-
+app.use('/api/cita', require('./routes/cita.routes'));
 /*
 app.use('/api/mascotas', require('./routes/mascotas'));
 */
