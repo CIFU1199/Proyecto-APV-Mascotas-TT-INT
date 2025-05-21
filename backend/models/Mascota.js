@@ -61,5 +61,6 @@ module.exports = (sequelize) => {
       underscored: false, //EVita que sequelize trasforme los nombres
     }
   );
+  
   return Mascota;
 };

@@ -31,13 +31,14 @@ exports.createEspecie = async (req, res) => {
 exports.getAllEspecies = async (req, res) => {
   try {
     const especies = await Especie.findAll({
-      attributes: ['ESP_ID', 'ESP_NOMBRE', 'ESP_DESCRIPCION', 'ESP_ESTADO'] // Selecciona campos explícitamente
+      attributes: ['ESP_ID', 'ESP_NOMBRE', 'ESP_DESCRIPCION'], // Selecciona campos explícitamente
+      order: [['ESP_NOMBRE', 'ASC']]
     });
     res.json(especies);
   } catch (error) {
     console.error('Error al obtener especies:', error);
     res.status(500).json({ 
-      error: 'Error al obtener las especies',
+      error: 'Error interno del servidor',
       details: error.message 
     });
   }

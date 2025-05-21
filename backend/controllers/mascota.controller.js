@@ -1,6 +1,6 @@
 const { Especie, Mascota } = require('../models'); // Importa desde models/index.js
 const {validationResult}= require('express-validator');
-
+const { calcularEdad } = require('../utils/helpers'); 
 
 exports.registrarMascota  = async(req, res)=>{
     try{
@@ -63,3 +63,58 @@ exports.registrarMascota  = async(req, res)=>{
         })
     }
 } 
+
+exports.obtenerMisMascotas = async (req, res) => {
+  try{
+    const mascotas = await Mascota.findAll({
+      where:{USUA_ID: req.user.id}, //filtra por el id del usuario logueado
+      attributes:[
+        'MACT_ID',
+        'MACT_NOMBRE',
+        'MACT_SEXO',
+        'MACT_FECHA_NACIMIENTO',
+        'MACT_RAZA',
+        'MACT_PESO',
+        'MACT_COLOR',
+        'MACT_FOTO'
+      ],
+      include:[{
+        model: Especie,
+        as:'Especie',
+        attributes:['ESP_NOMBRE']
+      }],
+      order:[['MACT_NOMBRE','ASC']]
+    })
+
+    //Calcula la edad segun la fecha de nacimiento
+    const mascotasConEdad = mascotas.map(mascota => {
+      const edad = calcularEdad(mascota.MACT_FECHA_NACIMIENTO);
+      return { ...mascota.toJSON(), edad};
+    });
+
+    res.json(mascotasConEdad);
+  }catch(error){
+    console.log('Error al obtener mascota: ', error);
+    res.status(500).json({
+      error: 'Error interno del Servidor',
+      detalle: error.message
+    });
+  }
+};
+
+
+
+//Funcion Auxiliar para calcular edad
+/*
+function calcularEdad(fechaNacimiento){
+  const nacimiento = new Date(fechaNacimiento);
+  const hoy = new Date();
+  let edad = hoy.getFullYear() - nacimiento.getFullYear();
+  const mes = hoy.getMonth() - nacimiento.getMonth();
+
+  if(mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())){
+    edad--;
+  }
+  return edad;
+}
+*/

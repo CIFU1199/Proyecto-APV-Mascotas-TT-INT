@@ -1,5 +1,6 @@
-const { Cita, Mascota, Usuario, sequelize } = require("../models");
+const { Cita, Mascota, Usuario, Especie ,sequelize } = require("../models");
 const { validationResult } = require("express-validator");
+const { calcularEdad } = require('../utils/helpers');
 
 exports.registrarCita = async (req, res) => {
   const transaction = await sequelize.transaction();
@@ -101,3 +102,169 @@ exports.registrarCita = async (req, res) => {
     });
   }
 };
+
+
+exports.obtenerCitaUsuario = async (req, res) => {
+  try {
+    // Verificar que el usuario está autenticado 
+     if (!req.user?.id) {
+      return res.status(401).json({ error: 'Usuario no autenticado' });
+    }
+    // 1. Obtener las mascotas del usuario
+    const mascotas = await Mascota.findAll({
+      where: { USUA_ID: req.user.id },
+      attributes: ['MACT_ID'] // Solo necesitamos los IDs
+    });
+
+    // Extraer solo los IDs de las mascotas
+    const mascotaIds = mascotas.map(m => m.MACT_ID);
+
+    // 2. Obtener citas de esas mascotas
+    const citas = await Cita.findAll({
+      where: { MACT_ID: mascotaIds },
+      include: [
+        {
+          model: Mascota,
+          as: 'Mascota',
+          attributes: ['MACT_NOMBRE', 'MACT_FOTO'],
+          include: [{
+            model: Especie,
+            as: 'Especie',
+            attributes: ['ESP_NOMBRE']
+          }]
+        },
+        {
+          model: Usuario,
+          as: 'Veterinario',
+          attributes: ['USUA_NOMBRES']
+        }
+      ],
+      attributes: [
+        'CIT_ID',
+        'CIT_FECHACITA',
+        'CIT_HORA',
+        'CIT_TIPO',
+        'CIT_ESTADO',
+        'CIT_OBSERVACIONMEDICA',
+        'CIT_MOTIVOCITA'
+      ],
+      order: [
+        ['CIT_FECHACITA', 'ASC'],
+        ['CIT_HORA', 'ASC']
+      ]
+    });
+
+    // Formatear respuesta (igual que antes)
+    const response = citas.map(cita => ({
+      id: cita.CIT_ID,
+      mascota: {
+        nombre: cita.Mascota?.MACT_NOMBRE || 'Sin nombre',
+        foto: cita.Mascota?.MACT_FOTO || null,
+        especie: cita.Mascota?.Especie?.ESP_NOMBRE || 'Sin especie'
+      },
+      fecha: cita.CIT_FECHACITA,
+      hora: cita.CIT_HORA,
+      tipo: cita.CIT_TIPO,
+      estado: cita.CIT_ESTADO,
+      motivo: cita.CIT_MOTIVOCITA || 'Sin motivo especificado',
+      observaciones: cita.CIT_OBSERVACIONMEDICA || 'Sin observaciones',
+      veterinario: {
+        nombre: cita.Veterinario?.USUA_NOMBRES || 'Sin asignar'
+      }
+    }));
+
+    res.json(response);
+
+  }catch(error){
+    console.error('Error en Obtener las Citas del Usuario: ', error);
+    res.status(500).json({
+      error: "Error interno del servidor",
+      detalle: error.message,
+    })
+  }
+}
+
+
+exports.obtenerCitasCompletas = async (req, res)=>{
+  try{
+    const citas = await Cita.findAll({
+      include:[
+        {
+          model: Mascota,
+          as: 'Mascota',
+          attributes:[
+            'MACT_NOMBRE',
+            'MACT_FECHA_NACIMIENTO',
+            'MACT_RAZA',
+            'MACT_PESO',
+            'MACT_COLOR',
+            'MACT_FOTO'
+          ],
+          include: [
+            {
+              model: Especie,
+              as: 'Especie',
+              attributes:['ESP_NOMBRE']
+            },
+            {
+              model: Usuario,
+              as:'Dueño',
+              attributes:['USUA_NOMBRES']
+            }
+          ]
+        },
+        {
+          model:Usuario,
+          as: 'Veterinario',
+          attributes:['USUA_NOMBRES']
+        }
+      ],
+      attributes:[
+        'CIT_ID',
+        'CIT_FECHACITA',
+        'CIT_HORA',
+        'CIT_TIPO',
+        'CIT_ESTADO',
+        'CIT_MOTIVOCITA'
+      ],
+      order:[
+        ['CIT_FECHACITA','ASC'],
+        ['CIT_HORA','ASC']
+      ]
+    });
+
+    //Formatera respusesta con calulo de edad 
+    const response = citas.map(cita => {
+      const edadMascota = calcularEdad(cita.Mascota.MACT_FECHA_NACIMIENTO);
+
+      return{
+        id:cita.CIT_ID,
+        mascota:{
+          nombre: cita.Mascota.MACT_NOMBRE,
+          especie: cita.Mascota.Especie.ESP_NOMBRE,
+          edad: edadMascota,
+          raza: cita.Mascota.MACT_RAZA,
+          peso: cita.Mascota.MACT_PESO,
+          color: cita.Mascota.MACT_COLOR,
+          foto: cita.Mascota.MACT_FOTO
+        },
+        dueño:cita.Mascota.Dueño.USUA_NOMBRES,
+        veterinario: cita.Veterinario.USUA_NOMBRES,
+        fecha: cita.CIT_FECHACITA,
+        hora: cita.CIT_HORA,
+        tipo: cita.CIT_TIPO,
+        estado: cita.CIT_ESTADO,
+        motivo: cita.CIT_MOTIVOCITA
+      };
+    });
+
+    res.json(response);
+  }catch(error){
+    console.error('Error en Obtener las Citas del Usuario: ', error);
+    res.status(500).json({
+      error: "Error interno del servidor",
+      detalle: error.message,
+    })
+  }
+
+}
