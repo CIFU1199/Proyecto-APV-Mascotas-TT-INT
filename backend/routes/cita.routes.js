@@ -15,6 +15,9 @@ router.post('/registrar',
 
 router.get('/mis-citas',authMiddleware, checkRole([1,3]),citaController.obtenerCitaUsuario);
 
-router.get('/citas-completas',authMiddleware, checkRole([1,2]),citaController.obtenerCitasCompletas)
+router.get('/citas-completas',authMiddleware, checkRole([1,2]),citaController.obtenerCitasCompletas);
 
+router.put('/:id/cancelar',authMiddleware,checkRole([1,2]),citaController.cancelarCita);
+
+router.put('/:id/atender',authMiddleware,checkRole([1,2]),citaController.atenderCita);
 module.exports = router;

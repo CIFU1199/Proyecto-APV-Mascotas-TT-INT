@@ -8,6 +8,7 @@ const Especie = require('./Especie')(sequelize);
 const Mascota = require('./Mascota')(sequelize);
 const Usuario = require('./Usuario')(sequelize);
 const Cita = require('./Cita')(sequelize);
+const HistorialMedico = require('./HistorialMedico')(sequelize);
 
 // 3. Configurar asociaciones
 function configurarAsociaciones() {
@@ -19,11 +20,18 @@ function configurarAsociaciones() {
   Cita.belongsTo(Mascota, { foreignKey: 'MACT_ID', as: 'Mascota' });
   Cita.belongsTo(Usuario, { foreignKey: 'USUA_IDVETERINARIO', as: 'Veterinario' });
   
+  //Asociaciones de Historial Medico
+  HistorialMedico.belongsTo(Mascota, { foreignKey: 'MACT_ID', as:'Mascota'});
+  HistorialMedico.belongsTo(Usuario,{foreignKey: 'USUA_IDVETERINARIO',as: 'Veterinario'});
+  
+  
   // Asociaciones inversas
   Especie.hasMany(Mascota, { foreignKey: 'ESP_ID' });
   Usuario.hasMany(Mascota, { foreignKey: 'USUA_ID' });
   Usuario.hasMany(Cita, { foreignKey: 'USUA_IDVETERINARIO' });
   Mascota.hasMany(Cita, { foreignKey: 'MACT_ID' });
+
+
 }
 
 // 4. Ejecutar configuración
@@ -53,5 +61,6 @@ module.exports = {
   Especie,
   Mascota,
   Usuario,
-  Cita
+  Cita,
+  HistorialMedico
 };
