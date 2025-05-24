@@ -3,9 +3,16 @@ const cors = require('cors');
 const app = express();
 const sequelize = require('./config/db'); 
 
+// Configuración de CORS
+const corsOptions = {
+  origin: 'http://localhost:5173', // Cambia esto si tu frontend se hospeda en otro lado
+  credentials: true
+};
+
+
 
 //Middlewares
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Conexión a la base de datos
