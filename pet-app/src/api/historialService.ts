@@ -1,20 +1,49 @@
 import apiClient from './apiClient';
 
-interface RegistroHistorial {
+interface HistorialMascota {
+  id: number;
+  fechaHistorial: string;
+  tipo: string;
+  descripcion: string;
+  observaciones: string;
+  veterinarioHistorial: string;
+  nombreMascota: string;
+  especie: string;
+  sexo: string;
+  edad: string;
+  raza: string;
+  peso: string;
+  color: string;
+  foto: string;
+  nombreDueno: string;
+  telefonoDueno: string;
+  citaId?: number;
+  duracion?: number;
+  tipoCita?: string;
+  estadoCita?: string;
+  veterinarioCita?: string;
+  observacionCita?: string;
+}
+
+interface HistorialGeneralItem {
   id: number;
   fecha: string;
   tipo: string;
   descripcion: string;
-  detalles: string;
   observaciones: string;
-  veterinario: string;
-  mascota?: string;      // opcional, si viene del backend
-  citaId?: number | null; // opcional, si es manual
+  veterinarioNombre: string;
+  mascota: {
+    id: number;
+    nombre: string;
+  };
 }
 
+interface ApiResponse<T> {
+  data: T;
+}
 
 const HistorialService = {
-  obtenerHistorialMascota: (mascotaId: number) => 
+  obtenerHistorialMascota: (mascotaId: number): Promise<ApiResponse<HistorialMascota[]>> => 
     apiClient.get(`/cita/historial/${mascotaId}`),
 
   crearRegistroHistorial: (data: {
@@ -23,15 +52,14 @@ const HistorialService = {
     descripcion: string;
     detalles: string;
     observaciones: string;
-  }) => apiClient.post('/cita/historial/crear', data),
+  }): Promise<ApiResponse<any>> => apiClient.post('/cita/historial/crear', data),
 
-  filtrarHistorialPorTipo: (mascotaId: number, tipo: string) => 
+  filtrarHistorialPorTipo: (mascotaId: number, tipo: string): Promise<ApiResponse<HistorialMascota[]>> => 
     apiClient.get(`/cita/historial/${mascotaId}/tipo/${tipo}`),
    
-  obtenerHistorialGeneral: () => apiClient.get('/cita/historial/general')
-  
+  obtenerHistorialGeneral: (): Promise<ApiResponse<HistorialGeneralItem[]>> => 
+    apiClient.get('/cita/historial')
 };
 
 export default HistorialService;
-
-export type {RegistroHistorial}
+export type { HistorialMascota, HistorialGeneralItem as HistorialGeneral };
