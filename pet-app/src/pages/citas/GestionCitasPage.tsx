@@ -261,6 +261,10 @@ const renderModalContent = () => {
               >
                 <MenuItem value="">Todos</MenuItem>
                 <MenuItem value="Pendiente">Pendiente</MenuItem>
+<<<<<<< HEAD
+=======
+                <MenuItem value="Confirmada">Confirmada</MenuItem>
+>>>>>>> 60fc0f218f8e73ae8797d11b0b2c61b31f892311
                 <MenuItem value="Cancelada">Cancelada</MenuItem>
                 <MenuItem value="Atendida">Atendida</MenuItem>
               </TextField>

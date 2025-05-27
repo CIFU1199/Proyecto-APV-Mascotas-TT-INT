@@ -27,7 +27,17 @@ router.get('/mascota/:mascotaId', authMiddleware, checkRole([1, 2, 3]), gestionC
 router.put('/:id/reprogramar', authMiddleware, checkRole([1, 2]), gestionCitasController.reprogramarCita);
 
 router.get('/citas-completas',authMiddleware, checkRole([1,2]),gestionCitasController.obtenerCitasCompletas);
+//Rutas de administracion de las citas 
 
+router.get('/filtrar', authMiddleware, checkRole([1,2]), gestionCitasController.filtrarCitas);
+
+router.get('/mascota/:mascotaId', authMiddleware, checkRole([1, 2, 3]), gestionCitasController.obtenerCitasPorMacota);
+
+router.put('/:id/reprogramar', authMiddleware, checkRole([1, 2]), gestionCitasController.reprogramarCita);
+
+router.get('/citas-completas',authMiddleware, checkRole([1,2]),gestionCitasController.obtenerCitasCompletas);
+
+router.put('/:id/cancelar',authMiddleware,checkRole([1,2]),gestionCitasController.cancelarCita);
 router.put('/:id/cancelar',authMiddleware,checkRole([1,2]),gestionCitasController.cancelarCita);
 
 router.put('/:id/atender',authMiddleware,checkRole([1,2]),gestionCitasController.atenderCita);
