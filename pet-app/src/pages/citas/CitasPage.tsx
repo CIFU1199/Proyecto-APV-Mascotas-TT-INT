@@ -347,7 +347,8 @@ const CitasPage: React.FC = () => {
                   <MenuItem value="vacunacion">Vacunación</MenuItem>
                   <MenuItem value="cirugia">Cirugía</MenuItem>
                   <MenuItem value="emergencia">Emergencia</MenuItem>
-                  <MenuItem value="control">Control</MenuItem>
+                  <MenuItem value="estética">Estética</MenuItem>
+                  <MenuItem value="otros">Otros</MenuItem>
                 </Select>
               </FormControl>
 

@@ -1,4 +1,3 @@
-// src/pages/pets/RegisterPet.tsx
 import { 
   Container, 
   Paper, 
@@ -11,7 +10,6 @@ import {
   Select, 
   FormControl, 
   InputLabel,
-  Divider,
   Avatar,
   List,
   ListItem,

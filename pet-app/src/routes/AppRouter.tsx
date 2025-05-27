@@ -58,7 +58,7 @@ export default function AppRouter() {
           <GestionCitasPage />
         </ProtectedRoute>
       } />
-
+      
       <Route path="/medical-history" element={
         <ProtectedRoute>
           <HistorialMascotaPage />

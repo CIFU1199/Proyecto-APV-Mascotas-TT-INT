@@ -3,7 +3,8 @@ import {
   Container, Typography, Table, TableHead, TableRow, TableCell, TableBody, TableContainer,
   Paper, Button, Chip, Modal, Box, TextField, MenuItem, Avatar, CircularProgress
 } from '@mui/material';
-import HistorialService, { HistorialGeneral } from '../../api/historialService';
+import HistorialService from '../../api/historialService';
+import { type HistorialGeneral } from '../../api/historialService';
 
 const styleModal = {
   position: 'absolute' as const,
@@ -36,7 +37,7 @@ const HistorialMascotaPage: React.FC = () => {
     try {
       setLoading(true);
       const res = await HistorialService.obtenerHistorialGeneral();
-      setHistorial(res.data);
+      setHistorial(res);
       setError(null);
     } catch (err) {
       console.error('Error al obtener historial general', err);

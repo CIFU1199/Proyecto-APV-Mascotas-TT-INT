@@ -7,7 +7,6 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Divider,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
@@ -32,6 +31,7 @@ export default function Navbar() {
   const userData = JSON.parse(localStorage.getItem("userData") || "{}");
   const userRole = userData?.rol || 0; // 1: Admin, 2: Veterinario, 3: Cliente
 
+  /*
   useEffect(() => {
     console.log("Datos de usuario:", {
       userData,
@@ -39,6 +39,8 @@ export default function Navbar() {
       localStorage: localStorage.getItem("userData"),
     });
   }, []);
+*/
+
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };

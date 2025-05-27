@@ -38,28 +38,34 @@ interface HistorialGeneralItem {
   };
 }
 
-interface ApiResponse<T> {
-  data: T;
-}
-
 const HistorialService = {
-  obtenerHistorialMascota: (mascotaId: number): Promise<ApiResponse<HistorialMascota[]>> => 
-    apiClient.get(`/cita/historial/${mascotaId}`),
+  obtenerHistorialMascota: async (mascotaId: number): Promise<HistorialMascota[]> => {
+    const res = await apiClient.get(`/cita/historial/${mascotaId}`);
+    return res.data;
+  },
 
-  crearRegistroHistorial: (data: {
+  crearRegistroHistorial: async (data: {
     mascotaId: number;
     tipo: string;
     descripcion: string;
     detalles: string;
     observaciones: string;
-  }): Promise<ApiResponse<any>> => apiClient.post('/cita/historial/crear', data),
+  }): Promise<any> => {
+    const res = await apiClient.post('/cita/historial/crear', data);
+    return res.data;
+  },
 
-  filtrarHistorialPorTipo: (mascotaId: number, tipo: string): Promise<ApiResponse<HistorialMascota[]>> => 
-    apiClient.get(`/cita/historial/${mascotaId}/tipo/${tipo}`),
-   
-  obtenerHistorialGeneral: (): Promise<ApiResponse<HistorialGeneralItem[]>> => 
-    apiClient.get('/cita/historial')
+  filtrarHistorialPorTipo: async (mascotaId: number, tipo: string): Promise<HistorialMascota[]> => {
+    const res = await apiClient.get(`/cita/historial/${mascotaId}/tipo/${tipo}`);
+    return res.data;
+  },
+
+  obtenerHistorialGeneral: async (): Promise<HistorialGeneralItem[]> => {
+    const res = await apiClient.get('/cita/historial');
+    return res.data.data;
+  }
 };
 
 export default HistorialService;
 export type { HistorialMascota, HistorialGeneralItem as HistorialGeneral };
+
