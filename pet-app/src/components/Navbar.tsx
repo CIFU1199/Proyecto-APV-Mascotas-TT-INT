@@ -70,7 +70,7 @@ export default function Navbar() {
       {
         show: userRole === 1,
         icon: <PersonAdd sx={{ mr: 1 }} />,
-        text: "Registrar Veterinario",
+        text: "Gestionar Usuarios",
         action: () => {
           navigate("/register-vet");
           handleClose();

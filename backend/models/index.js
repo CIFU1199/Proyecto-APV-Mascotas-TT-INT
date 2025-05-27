@@ -19,18 +19,23 @@ function configurarAsociaciones() {
   // Asociaciones de Cita
   Cita.belongsTo(Mascota, { foreignKey: 'MACT_ID', as: 'Mascota' });
   Cita.belongsTo(Usuario, { foreignKey: 'USUA_IDVETERINARIO', as: 'Veterinario' });
-  
-  //Asociaciones de Historial Medico
-  HistorialMedico.belongsTo(Mascota, { foreignKey: 'MACT_ID', as:'Mascota'});
-  HistorialMedico.belongsTo(Usuario,{foreignKey: 'USUA_IDVETERINARIO',as: 'Veterinario'});
-  
-  
+
+// Asociaciones de Historial Medico
+  HistorialMedico.belongsTo(Mascota, { foreignKey: 'MACT_ID', as: 'Mascota' });
+  HistorialMedico.belongsTo(Usuario, { foreignKey: 'USUA_IDVETERINARIO', as: 'VeterinarioHistorial' }); // alias diferente
+  HistorialMedico.belongsTo(Cita, { foreignKey: 'CIT_ID', as: 'Cita' });
+
+
   // Asociaciones inversas
+
   Especie.hasMany(Mascota, { foreignKey: 'ESP_ID' });
   Usuario.hasMany(Mascota, { foreignKey: 'USUA_ID' });
   Usuario.hasMany(Cita, { foreignKey: 'USUA_IDVETERINARIO' });
   Mascota.hasMany(Cita, { foreignKey: 'MACT_ID' });
 
+  Usuario.hasMany(HistorialMedico, { foreignKey: 'USUA_IDVETERINARIO', as: 'HistorialesComoVeterinario' });
+  Mascota.hasMany(HistorialMedico, { foreignKey: 'MACT_ID', as: 'HistorialesMedicos' });
+  Cita.hasOne(HistorialMedico, { foreignKey: 'CIT_ID', sourceKey: 'CIT_ID', as: 'HistorialMedico' });// Cambiado a hasOne
 
 }
 
@@ -46,15 +51,6 @@ console.log('Modelos verificados:', {
 });
 
 
-/*
-// Establece relaciones
-Mascota.belongsTo(Especie, { foreignKey: 'ESP_ID' });
-Mascota.belongsTo(Usuario, { foreignKey: 'USUA_ID' });
-Cita.belongsTo(Mascota, { foreignKey: 'MACT_ID' });
-Cita.belongsTo(Usuario, { foreignKey: 'USUA_IDVETERINARIO', as: 'Veterinario'});
-*/
-// Sincronización opcional (comenta temporalmente para pruebas)
-// sequelize.sync({ alter: true }).then(() => console.log('Modelos sincronizados'));
 
 module.exports = {
   sequelize,

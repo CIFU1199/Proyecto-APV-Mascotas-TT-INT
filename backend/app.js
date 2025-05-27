@@ -5,7 +5,7 @@ const sequelize = require('./config/db');
 
 // Configuración de CORS
 const corsOptions = {
-  origin: 'http://localhost:5173', // Cambia esto si tu frontend se hospeda en otro lado
+  origin: process.env.FE_ORIGIN, // Cambia esto si tu frontend se hospeda en otro lado
   credentials: true
 };
 
@@ -40,8 +40,8 @@ app.use('/api/cita', require('./routes/cita.routes'));
 /*
 app.use('/api/mascotas', require('./routes/mascotas'));
 */
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT;
 
 app.listen(PORT,() =>{
-    console.log(`Servidor en http://localhost:${PORT}` );
+    console.log(`Servidor en ${process.env.BE_ORIGIN}:${PORT}` );
 })

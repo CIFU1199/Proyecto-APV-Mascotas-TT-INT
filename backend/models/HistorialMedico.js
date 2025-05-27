@@ -15,6 +15,10 @@ module.exports = (sequelize) => {
         allowNull: false,
         field: "MACT_ID",
       },
+      CIT_ID: {
+        type: DataTypes.INTEGER,
+        field: "CIT_ID",
+      },
       HM_FECHA: {
         type: DataTypes.DATEONLY,
         allowNull: false,
@@ -50,7 +54,7 @@ module.exports = (sequelize) => {
     {
       tableName: "historial_medico",
       timestamps: false,
-      underscored: false,
+      underscored: true,
       freezeTableName: true,
       indexes: [
         {
