@@ -46,15 +46,6 @@ console.log('Modelos verificados:', {
 });
 
 
-/*
-// Establece relaciones
-Mascota.belongsTo(Especie, { foreignKey: 'ESP_ID' });
-Mascota.belongsTo(Usuario, { foreignKey: 'USUA_ID' });
-Cita.belongsTo(Mascota, { foreignKey: 'MACT_ID' });
-Cita.belongsTo(Usuario, { foreignKey: 'USUA_IDVETERINARIO', as: 'Veterinario'});
-*/
-// Sincronización opcional (comenta temporalmente para pruebas)
-// sequelize.sync({ alter: true }).then(() => console.log('Modelos sincronizados'));
 
 module.exports = {
   sequelize,

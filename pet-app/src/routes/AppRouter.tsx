@@ -7,6 +7,11 @@ import Register from "../pages/Register";
 import { ProtectedRoute } from '../components/ProtectedRoute';
 import RegisterPet from '../pages/pet/RegiterPet'
 import UserManagementPage from "../pages/userManagement/userManagementPage";
+import EspecieManagementPage from "../pages/species/EspecieManagementPage";
+import CitasPage from "../pages/citas/CitasPage";
+import GestionCitasPage from "../pages/citas/GestionCitasPage";
+import HistorialMascotaPage from "../pages/citas/HistorialMascotaPage";
+
 
 // Importa otras páginas aquí (ej: PetList, PetForm)
 
@@ -36,6 +41,29 @@ export default function AppRouter() {
         </ProtectedRoute>
       } />
 
+      <Route path="/create-species" element={
+        <ProtectedRoute>
+          <EspecieManagementPage />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/create-appointment" element={
+        <ProtectedRoute>
+          <CitasPage />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/manage-appointments" element={
+        <ProtectedRoute>
+          <GestionCitasPage />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/medical-history" element={
+        <ProtectedRoute>
+          <HistorialMascotaPage />
+        </ProtectedRoute>
+      } />
 
     </Routes>
   );

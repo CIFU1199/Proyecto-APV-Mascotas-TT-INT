@@ -45,7 +45,7 @@ export default function Dashboard() {
   // Obtener acciones según el rol
   const getQuickActions = () => {
     const adminActions = [
-      { icon: <PersonAdd fontSize="large" />, label: 'Registrar Veterinario', path: '/register-vet' },
+      { icon: <PersonAdd fontSize="large" />, label: 'Gestionar Usuarios', path: '/register-vet' },
       { icon: <Groups fontSize="large" />, label: 'Crear Especie', path: '/create-species' },
       { icon: <Pets fontSize="large" />, label: 'Registrar Mascota', path: '/register-pet' },
       { icon: <CalendarToday fontSize="large" />, label: 'Crear Cita', path: '/create-appointment' },

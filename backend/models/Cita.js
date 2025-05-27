@@ -48,7 +48,6 @@ module.exports = (sequelize) =>{
         },
         USUA_IDVETERINARIO:{
             type: DataTypes.INTEGER,
-            allowNull: false,
             field: "USUA_IDVETERINARIO"
         },
         CIT_CREADO_POR:{
