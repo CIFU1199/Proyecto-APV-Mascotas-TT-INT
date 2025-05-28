@@ -23,6 +23,7 @@ import { useForm } from 'react-hook-form';
 import { Link as RouterLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { AuthService } from '../api/authService';
+import { useAuth } from '../context/AuthContext';
 
 
 
@@ -30,7 +31,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  
+  const { login } = useAuth();
   const { 
     register, 
     handleSubmit, 
@@ -42,18 +43,12 @@ export default function Login() {
     }
   });
 
-  const onSubmit = async (data: { email: string; password: string })=> {
-    try{
-      const {token, userId, nombre, rol} = await AuthService.login(data.email,data.password);
-      
-      //guardamos el token en localStorage
-      localStorage.setItem('token', token);
-      localStorage.setItem('userData', JSON.stringify({userId, nombre, rol}));
-
-      //redirige al Dashboard
+  const onSubmit = async (data: { email: string; password: string }) => {
+    try {
+      const { token, userId, nombre, rol } = await AuthService.login(data.email, data.password);
+      login(token, { userId, nombre, rol });
       navigate('/dashboard');
-
-    }catch(err:any){
+    } catch (err: any) {
       setError(err.message || 'Error al iniciar sesión');
     }
   };

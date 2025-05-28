@@ -3,7 +3,7 @@ import axios from 'axios';
 //import { useNavigate } from 'react-router-dom';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:4000/api', // Asegúrate que coincida con tu API
+  baseURL: import.meta.env.VITE_API_BASE_URL, // Asegúrate que coincida con tu API
   timeout: 10000,
 });
 

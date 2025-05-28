@@ -4,7 +4,7 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Dashboard from '../pages/Dashboard';
 import Register from "../pages/Register";
-import { ProtectedRoute } from '../components/ProtectedRoute';
+import ProtectedRoute from './ProtectedRoute';
 import RegisterPet from '../pages/pet/RegiterPet'
 import UserManagementPage from "../pages/userManagement/userManagementPage";
 import EspecieManagementPage from "../pages/species/EspecieManagementPage";
