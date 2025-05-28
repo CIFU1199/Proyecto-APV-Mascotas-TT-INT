@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect ,useState  } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Box, 
@@ -9,7 +9,8 @@ import {
   Avatar,
   Stack,
   Divider,
-  Chip
+  Chip,
+  CircularProgress
 } from '@mui/material';
 import { 
   Pets,
@@ -25,7 +26,12 @@ import {
   Groups
 } from '@mui/icons-material';
 
+import {obtenerEstadisticas} from '../api/estadisticaService';
+import type{EstadisticasResponse} from '../api/estadisticaService';
+
 export default function Dashboard() {
+  const [estadisticas, setEstadisticas]= useState<EstadisticasResponse | null>(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem('userData') || '{}');
   const userRole = userData?.rol || 0; // 1: Admin, 2: Veterinario, 3: Cliente
@@ -35,6 +41,20 @@ export default function Dashboard() {
       navigate('/login');
     }
   }, [navigate]);
+
+  useEffect(() => {
+    const fetchEstadisticas = async () =>{
+      try{
+        const data = await obtenerEstadisticas();
+        setEstadisticas(data);
+      }catch(error){
+        console.error('Error cargando estadísticas: ',error);
+      }finally{
+        setLoading(false);
+      }
+    };
+    fetchEstadisticas();
+  },[]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -205,26 +225,36 @@ export default function Dashboard() {
           <Typography variant="h6" gutterBottom sx={{ fontWeight: 'medium' }}>
             Estadísticas de Administrador
           </Typography>
+          {loading ? (
+            <CircularProgress/>
+          ):(
           <Grid container spacing={3}>
             <Grid size={{ xs: 12, md: 4 }}>
               <Paper sx={{ p: 2, textAlign: 'center' }}>
                 <Typography variant="h6">Usuarios Registrados</Typography>
-                <Typography variant="h4" color="primary">24</Typography>
+                <Typography variant="h4" color="primary">
+                  {estadisticas?.usuarios}
+                </Typography>
               </Paper>
             </Grid>
             <Grid size={{ xs: 12, md: 4 }}>
               <Paper sx={{ p: 2, textAlign: 'center' }}>
                 <Typography variant="h6">Mascotas Registradas</Typography>
-                <Typography variant="h4" color="primary">156</Typography>
+                <Typography variant="h4" color="primary">
+                  {estadisticas?.mascotas}
+                </Typography>
               </Paper>
             </Grid>
             <Grid size={{ xs: 12, md: 4 }}>
               <Paper sx={{ p: 2, textAlign: 'center' }}>
                 <Typography variant="h6">Citas Programadas</Typography>
-                <Typography variant="h4" color="primary">32</Typography>
+                <Typography variant="h4" color="primary">
+                  {estadisticas?.citas}
+                </Typography>
               </Paper>
             </Grid>
           </Grid>
+          )}
         </Paper>
       )}
 
