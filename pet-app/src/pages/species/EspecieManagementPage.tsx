@@ -23,6 +23,7 @@ import {
   TableRow,
   TextField,
   Tooltip,
+  CircularProgress 
 } from '@mui/material';
 import { Add, Edit, Delete, ToggleOn, ToggleOff } from '@mui/icons-material';
 import { useSnackbar } from 'notistack';
@@ -38,7 +39,7 @@ interface Especie {
 const EspecieManagementPage: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [especies, setEspecies] = useState<Especie[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading,setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [currentEspecie, setCurrentEspecie] = useState<Especie | null>(null);
   const [formValues, setFormValues] = useState({
@@ -77,7 +78,7 @@ const EspecieManagementPage: React.FC = () => {
     loadEspecies();
   }, [pagination.page, pagination.rowsPerPage, searchTerm]);
 
-  const handlePageChange = (event: unknown, newPage: number) => {
+  const handlePageChange = (_: unknown, newPage: number) => {
     setPagination(prev => ({ ...prev, page: newPage }));
   };
 
@@ -186,6 +187,11 @@ const EspecieManagementPage: React.FC = () => {
                   <TableCell>Acciones</TableCell>
                 </TableRow>
               </TableHead>
+              {loading ? (
+                <Box textAlign="center" p={2}>
+                  <CircularProgress />
+                </Box>
+              ) : (
               <TableBody>
                 {especies.map((especie) => (
                   <TableRow key={especie.ESP_ID}>
@@ -235,7 +241,8 @@ const EspecieManagementPage: React.FC = () => {
                     </TableCell>
                   </TableRow>
                 ))}
-              </TableBody>
+              </TableBody> 
+            )}
             </Table>
           </TableContainer>
 

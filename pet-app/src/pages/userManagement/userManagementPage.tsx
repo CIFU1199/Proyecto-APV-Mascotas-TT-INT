@@ -98,7 +98,7 @@ const UserManagementPage: React.FC = () => {
   }, [pagination.page, pagination.rowsPerPage, filtros]);
 
   // Manejar cambio de página
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_: unknown, newPage: number) => {
     setPagination(prev => ({ ...prev, page: newPage }));
   };
 
@@ -216,6 +216,7 @@ const UserManagementPage: React.FC = () => {
               variant="contained" 
               color="primary"
               onClick={handleNewUser}
+              disabled={loading}
             >
               Nuevo Usuario
             </Button>

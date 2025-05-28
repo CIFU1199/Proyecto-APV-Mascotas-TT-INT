@@ -6,8 +6,8 @@ interface FiltroCitas{
   fecha?: string;
   estado?: string;
   tipo?: string ;
-  veterinarioId: number;
-  mascotaId: number;
+  veterinarioId?: number;
+  mascotaId?: number;
 
 }
 

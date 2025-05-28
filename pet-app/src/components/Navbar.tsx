@@ -22,7 +22,7 @@ import {
   Person,
 } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -285,7 +285,7 @@ export default function Navbar() {
                 <MenuItem
                   key={index}
                   onClick={option.action}
-                  sx={{ color: option.color || "inherit" }}
+                  sx={{ color: (option as any).color || "inherit" }}
                 >
                   {option.icon}
                   {option.text}

@@ -46,3 +46,5 @@ export const PetService = {
         return response.data;
     }
 }
+
+export type {PetData,Species, Pet}

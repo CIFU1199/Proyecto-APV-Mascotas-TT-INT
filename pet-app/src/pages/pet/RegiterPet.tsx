@@ -22,13 +22,15 @@ import { Pets, Female, Male, Cake, Scale, Palette, PhotoCamera } from '@mui/icon
 import { useForm, Controller } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { PetService } from '../../api/petService';
+import type { Species, Pet , PetData} from '../../api/petService';
 import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
+
 
 export default function RegisterPet() {
-  const { control, handleSubmit, reset } = useForm();
-  const [species, setSpecies] = useState([]);
-  const [userPets, setUserPets] = useState([]);
+  const { control, handleSubmit, reset } = useForm<PetData>();
+  
+  const [species, setSpecies] = useState<Species[]>([]);
+  const [userPets, setUserPets] = useState<Pet[]>([]);
   const [loading, setLoading] = useState({
     species: true,
     pets: true,
@@ -56,7 +58,7 @@ export default function RegisterPet() {
     loadData();
   }, []);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data:PetData) => {
     setLoading({ ...loading, submitting: true });
     setError('');
     setSuccess('');
@@ -76,7 +78,11 @@ export default function RegisterPet() {
       const updatedPets = await PetService.getUserPets();
       setUserPets(updatedPets);
     } catch (err) {
-      setError(err.response?.data?.message || 'Error al registrar la mascota');
+      if (err instanceof Error && (err as any).response?.data?.message) {
+        setError((err as any).response.data.message);
+      } else {
+        setError('Error al registrar la mascota');
+      }
     } finally {
       setLoading({ ...loading, submitting: false });
     }
@@ -86,7 +92,7 @@ export default function RegisterPet() {
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Grid container spacing={4}>
         {/* Formulario de registro */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{xs:12, md:6}} >
           <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
             <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
               <Pets sx={{ mr: 1 }} /> Registrar Nueva Mascota
@@ -97,7 +103,7 @@ export default function RegisterPet() {
 
             <Box component="form" onSubmit={handleSubmit(onSubmit)}>
               <Grid container spacing={2}>
-                <Grid item xs={12}>
+                <Grid size={{xs:12}} >
                   <Controller
                     name="MACT_NOMBRE"
                     control={control}
@@ -115,7 +121,7 @@ export default function RegisterPet() {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid size={{xs:12}} >
                   <Controller
                     name="ESP_ID"
                     control={control}
@@ -148,7 +154,7 @@ export default function RegisterPet() {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid size={{xs:12,sm:6}}>
                   <Controller
                     name="MACT_SEXO"
                     control={control}
@@ -179,7 +185,7 @@ export default function RegisterPet() {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid size={{xs:12,sm:6}}>
                   <Controller
                     name="MACT_FECHA_NACIMIENTO"
                     control={control}
@@ -204,7 +210,7 @@ export default function RegisterPet() {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid size={{xs:12, sm:6}}>
                   <Controller
                     name="MACT_RAZA"
                     control={control}
@@ -222,11 +228,11 @@ export default function RegisterPet() {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid size={{xs:12,sm:6}}>
                   <Controller
                     name="MACT_PESO"
                     control={control}
-                    defaultValue=""
+                    defaultValue={0}
                     rules={{ 
                       required: 'Peso es requerido',
                       min: { value: 0.1, message: 'Peso mínimo 0.1 kg' }
@@ -250,7 +256,7 @@ export default function RegisterPet() {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid size={{xs:12}} >
                   <Controller
                     name="MACT_COLOR"
                     control={control}
@@ -273,7 +279,7 @@ export default function RegisterPet() {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid size={{xs:12}}>
                   <Controller
                     name="MACT_FOTO"
                     control={control}
@@ -297,7 +303,7 @@ export default function RegisterPet() {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid size={{xs:12}}>
                   <Button
                     type="submit"
                     fullWidth
@@ -315,7 +321,7 @@ export default function RegisterPet() {
         </Grid>
 
         {/* Listado de mascotas */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{xs:12,md:6}}>
           <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
             <Typography variant="h5" gutterBottom>
               Mis Mascotas Registradas
