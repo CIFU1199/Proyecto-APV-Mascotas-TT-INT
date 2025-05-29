@@ -8,7 +8,7 @@ interface PetData{
     MACT_RAZA: string;
     MACT_PESO: number;
     MACT_COLOR: string;
-    MACT_FOTO?: string;
+    MACT_FOTO?: File | null;
 }
 
 interface Species {
@@ -33,9 +33,28 @@ interface Pet{
 }
 
 export const PetService = {
-    registerPet: async (petData: PetData) => {
+    /*registerPet: async (petData: PetData) => {
         const response = await apiClient.post('/mascotas/registrar', petData);
         return response.data;
+    },*/
+    registerPet: async(petData: PetData)=>{
+        const formData = new FormData();
+
+        //agregamos los campos 
+        for(const key in petData){
+            if(petData[key as keyof PetData] !== undefined){
+                formData.append(key, petData[key as keyof PetData] as any);
+            }
+        }
+
+        const response = await apiClient.post('/mascotas/registrar',formData,{
+            headers:{
+                'Content-Type':'multipart/form-data',
+            },
+        })
+
+        return response.data;
+
     },
     getSpecies: async (): Promise<Species[]> => {
         const response = await apiClient.get('/especie/getEspecies');

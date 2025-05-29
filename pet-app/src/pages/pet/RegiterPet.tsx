@@ -72,14 +72,22 @@ export default function RegisterPet() {
       
       const response = await PetService.registerPet(formattedData);
       setSuccess(response.messaje);
+
       reset();
-      
+      // Oculta el mensaje 
+      setTimeout(() => {
+        setSuccess('');
+      },3000);
       // Actualizar lista de mascotas
       const updatedPets = await PetService.getUserPets();
       setUserPets(updatedPets);
     } catch (err) {
       if (err instanceof Error && (err as any).response?.data?.message) {
         setError((err as any).response.data.message);
+        setTimeout(() => {
+        setError('');
+        },3000);
+
       } else {
         setError('Error al registrar la mascota');
       }
@@ -283,7 +291,7 @@ export default function RegisterPet() {
                   <Controller
                     name="MACT_FOTO"
                     control={control}
-                    defaultValue=""
+                    defaultValue={null}
                     render={({ field }) => (
                       <Button
                         fullWidth
@@ -296,7 +304,13 @@ export default function RegisterPet() {
                           type="file"
                           hidden
                           accept="image/*"
-                          onChange={(e) => field.onChange(e.target.files?.[0])}
+                          onChange={(e) =>
+                            {
+                              if (e.target.files?.[0]){
+                                field.onChange(e.target.files?.[0])
+                              }
+                            } 
+                          }
                         />
                       </Button>
                     )}

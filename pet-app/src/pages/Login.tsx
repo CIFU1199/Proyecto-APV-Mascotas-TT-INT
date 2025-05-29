@@ -49,7 +49,13 @@ export default function Login() {
       login(token, { userId, nombre, rol });
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.message || 'Error al iniciar sesión');
+      const mensaje = err.message || 'Error al iniciar sesión';
+      setError(mensaje);
+
+      // Oculta el mensaje 
+      setTimeout(() => {
+        setError('');
+      },3000);
     }
   };
 
