@@ -1,6 +1,7 @@
 const { Especie, Mascota } = require('../models'); // Importa desde models/index.js
 const {validationResult}= require('express-validator');
 const { calcularEdad } = require('../utils/helpers'); 
+const upload = require('../middlewares/uploadMascota');
 
 exports.registrarMascota  = async(req, res)=>{
     try{
@@ -10,6 +11,7 @@ exports.registrarMascota  = async(req, res)=>{
             return res.status(400).json({errors: errors.array()})
         }
         const USUA_ID= req.user.id;
+        const MACT_FOTO = req.file ? `/upload/mascotas/${req.file.filename}`: null;
 
         const { 
             MACT_NOMBRE,
@@ -18,8 +20,7 @@ exports.registrarMascota  = async(req, res)=>{
             MACT_FECHA_NACIMIENTO,
             MACT_RAZA,
             MACT_PESO,
-            MACT_COLOR,
-            MACT_FOTO
+            MACT_COLOR
         } = req.body;
 
         const especie = await Especie.findByPk(ESP_ID);
